@@ -1,0 +1,57 @@
+﻿@model IEnumerable<EmployeesSolution.Models.Employee>
+@using GridMvc.Html
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <link href="@Url.Content("~/Content/Gridmvc.css")" rel="stylesheet" />
+    <link href="@Url.Content("~/Content/bootstrap.min.css")" rel="stylesheet" />
+    <script src="@Url.Content("~/Scripts/jquery-1.9.1.min.js")"></script>
+    <script src="@Url.Content("~/Scripts/gridmvc.min.js")"></script>
+    <title>List</title>
+    <style>
+        .green {
+            color: green
+        }
+
+        .red {
+            color: red;
+        }
+        .blue{
+            color:cornflowerblue;
+        }
+    </style>
+</head>
+<body>
+    <h1>Employees List</h1>
+    <hr />
+    <div style="width:500px;">
+        @Html.Grid(Model).Columns(columns =>
+   {
+       columns.Add(model => model.EmployeeName).Titled("Employee Name").Encoded(false).Sanitized(false).RenderValueAs(model => CustomRenderingOfColumn(model));
+       columns.Add(model => model.Department).Titled("Department");
+       columns.Add(model => model.Salary).Titled("Salary");
+   }).WithPaging(10).Sortable(true)
+    </div>
+</body>
+</html>
+@helper CustomRenderingOfColumn(EmployeesSolution.Models.Employee emp)
+{
+    if (emp.Salary >= 60000 && emp.Department.ToLower() != "hr")
+    {
+        <span class="green">@emp.EmployeeName</span>
+    }
+    else if (emp.Salary < 60000)
+    {
+        <span class="red">@emp.EmployeeName</span>
+    }
+    else if (emp.Department.ToLower() == "hr")
+    {
+        <span class="blue">@emp.EmployeeName</span>
+    }
+    else
+    {
+        <span>@emp.EmployeeName</span>
+    }
+}
+
